@@ -9,10 +9,30 @@ function find_indices_of_ones(dense_array::JuMP.Containers.DenseAxisArray)
     return indices_of_ones
 end
 
+function get_used_facilities(LR_Y)
+    used_j = Set() # 사용된 j를 저장할 집합
+    I, J, R = size(LR_Y) # LR_Y의 차원을 가져옴
+
+    for j in 1:J
+        for i in 1:I
+            for r in 0:(R-1)
+                if LR_Y[i, j, r] == 1
+                    push!(used_j, j) # j가 사용되었다면 집합에 추가
+                    break # 해당 j에 대한 검사를 중단하고 다음 j로 넘어감
+                end
+            end
+            if j in used_j
+                break # 이미 사용된 j로 확인되면 더 이상의 i 검사는 필요 없음
+            end
+        end
+    end
+
+    return sort(collect(used_j)) # 사용된 j의 정렬된 리스트 반환
+end
 
 
-function heuristic_RPMP(LR_X, I, J, P, d, q, NF, alpha)
-    heuristic_X = find_indices_of_ones(LR_X)
+function heuristic_RPMP(LR_X, LR_Y, I, J, P, d, q, NF, alpha)
+    heuristic_X = get_used_facilities(LR_Y)
     heuristic_Y = zeros(Int, length(I), length(J), P) # r index 1부터 시작!
 
     for i in I
