@@ -1,0 +1,77 @@
+
+function RPMP(I, J, h, d, NF, F, u, q, P, alpha)
+
+    # the Reliabiltiy P-Median Problem
+    m = Model(CPLEX.Optimizer)
+
+    @variable(m, X[j in J], Bin)
+    @variable(m, Y[i in I, j in J, r in (0:P-1)], Bin)
+    w1 = sum(h[i] * d[i,j] * Y[i,j,0] for i in I, j in J)
+    w2 = sum(h[i] * (sum(d[i,j]* q^r * Y[i,j,r] for j in NF, r in 0:(P-1)) + sum(d[i,j] * q^r * (1-q) * Y[i,j,r] 
+    for j in F, r in 0:(P-1)) ) for i in I)
+    @objective(m, Min, sum(alpha * w1 + (1-alpha) * w2))
+
+    @constraint(m, c1[i in I, r in 0:(P-1)], sum(Y[i,j,r] for j in J) + sum(Y[i,j,s] for j in NF, 
+    s in 0:(r-1)) == 1)
+    @constraint(m, c2[i in I, j in J, r in 0:(P-1)],Y[i,j,r] <= X[j])
+    @constraint(m, c3, sum(X[j] for j in J) == P)
+    @constraint(m, c4[i in I, j in J], sum(Y[i,j,r] for r in 0:(P-1)) <=1)
+    @constraint(m, c5, X[u] .==1)
+
+    optimize!(m)
+
+    if termination_status(m) == MOI.OPTIMAL
+        println("The optimal value is: ", objective_value(m))
+        println("The optimal solution is: ", value.(X))
+    else
+        println("No solution")
+    end
+
+    return value.(X), value.(Y), objective_value(m)
+end
+
+function relaxed_RPMP(I, J, h, d, NF, F, u, q, P, alpha, lambda)
+
+    # the Relaxed P-Median Problem
+    m = Model(CPLEX.Optimizer)
+
+    @variable(m, X[j in J], Bin)
+    @variable(m, Y[i in I, j in J, r in 0:(P-1)], Bin)
+
+    psi = Array{Float64, 3}(undef, length(I), length(J), P) # r인덱스 1부터 시작
+    for i in I
+        for j in J
+            for r in 0:(P-1)
+
+                if r == 0 & j in NF
+                    psi[i,j,(r+1)] = h[i]*d[i,j]
+                elseif r == 0 & j in F
+                    psi[i,j,(r+1)] = alpha*h[i]*d[i,j] + (1-alpha)*h[i]*d[i,j]*(1-q)
+                elseif r > 0 & j in NF
+                    psi[i,j,(r+1)] = (1-alpha)*h[i]*d[i,j]*q^r
+                else
+                    psi[i,j,(r+1)] = alpha*h[i]*d[i,j]*q^r*(1-q)
+                end
+            end
+        end
+    end
+    relaxed_term = sum(lambda[i,(r+1)] * (1-sum(Y[i,j,r] for j in J) -(r > 0 ? sum(Y[i,j,s] 
+    for j in NF, s in 0:(r-1)) : 0)) for i in I, r in 0:(P-1))
+    @objective(m, Min, sum(psi[i,j,(r+1)]*Y[i,j,r] for i in I, j in J, r in 0:(P-1)) +relaxed_term)
+
+    @constraint(m, c2[i in I, j in J, r in 0:(P-1)],Y[i,j,r] <= X[j])
+    @constraint(m, c3, sum(X[j] for j in J) == P)
+    @constraint(m, c4[i in I, j in J], sum(Y[i,j,r] for r in 0:(P-1)) <=1)
+    @constraint(m, c5, X[u] .==1)
+
+    optimize!(m)
+
+    if termination_status(m) == MOI.OPTIMAL
+        println("The optimal value is: ", objective_value(m))
+        println("The optimal solution is: ", value.(X))
+    else
+        println("No solution")
+    end
+
+    return value.(X), value.(Y), objective_value(m)
+end

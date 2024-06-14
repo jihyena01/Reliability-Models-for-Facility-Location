@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_34da9cb6441f7fcecbf932a58a81f82c {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_34da9cb6441f7fcecbf932a58a81f82c" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_34da9cb6441f7fcecbf932a58a81f82c = L.map(
+                "map_34da9cb6441f7fcecbf932a58a81f82c",
+                {
+                    center: [36.35, 127.38],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_4dd35458972f52e4bcc7441edb34a54a = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_4dd35458972f52e4bcc7441edb34a54a.addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+            var marker_64620a5f00001f5d96af235b3c3b06ce = L.marker(
+                [36.4284, 127.4277],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_c1268f46e77de2470b3edcf0e7e58b3a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_5ff91fffeed8744addbd0d34c6db9a2e = $(`<div id="html_5ff91fffeed8744addbd0d34c6db9a2e" style="width: 100.0%; height: 100.0%;">대전보훈병원</div>`)[0];
+                popup_c1268f46e77de2470b3edcf0e7e58b3a.setContent(html_5ff91fffeed8744addbd0d34c6db9a2e);
+            
+        
+
+        marker_64620a5f00001f5d96af235b3c3b06ce.bindPopup(popup_c1268f46e77de2470b3edcf0e7e58b3a)
+        ;
+
+        
+    
+    
+            var marker_b133fdd851248d20276f124d2efb7874 = L.marker(
+                [36.332, 127.4455],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_698f0f9f76499057a9602132c1f483d0 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_fbebedbe849d67ae549737ce4e8a2b4e = $(`<div id="html_fbebedbe849d67ae549737ce4e8a2b4e" style="width: 100.0%; height: 100.0%;">대전한국병원</div>`)[0];
+                popup_698f0f9f76499057a9602132c1f483d0.setContent(html_fbebedbe849d67ae549737ce4e8a2b4e);
+            
+        
+
+        marker_b133fdd851248d20276f124d2efb7874.bindPopup(popup_698f0f9f76499057a9602132c1f483d0)
+        ;
+
+        
+    
+    
+            var marker_0948eb2fb0830061b94855d9c825dc78 = L.marker(
+                [36.3017, 127.3731],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_ca1e178cbbe9b99e5259724b6c25de8e = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_e95704c380613ea2652f84393ae857a8 = $(`<div id="html_e95704c380613ea2652f84393ae857a8" style="width: 100.0%; height: 100.0%;">대청병원</div>`)[0];
+                popup_ca1e178cbbe9b99e5259724b6c25de8e.setContent(html_e95704c380613ea2652f84393ae857a8);
+            
+        
+
+        marker_0948eb2fb0830061b94855d9c825dc78.bindPopup(popup_ca1e178cbbe9b99e5259724b6c25de8e)
+        ;
+
+        
+    
+    
+            var marker_72421f494bc70f1fb665871abdad704a = L.marker(
+                [36.2881, 127.3441],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_e611d37c6a8ee97f02dc04f2767a5914 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_cc92ad5e928a73ca2f25ee3dcefc5850 = $(`<div id="html_cc92ad5e928a73ca2f25ee3dcefc5850" style="width: 100.0%; height: 100.0%;">건양대학교병원</div>`)[0];
+                popup_e611d37c6a8ee97f02dc04f2767a5914.setContent(html_cc92ad5e928a73ca2f25ee3dcefc5850);
+            
+        
+
+        marker_72421f494bc70f1fb665871abdad704a.bindPopup(popup_e611d37c6a8ee97f02dc04f2767a5914)
+        ;
+
+        
+    
+    
+            var marker_4088a35a4b022ab6a1a6e202cc35ddf8 = L.marker(
+                [36.3542, 127.3784],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_6271c692e784a40936e50d97c9f7f1a7 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_72f8abf60aac6be7c00afb3efc04db76 = $(`<div id="html_72f8abf60aac6be7c00afb3efc04db76" style="width: 100.0%; height: 100.0%;">대전을지대학교병원</div>`)[0];
+                popup_6271c692e784a40936e50d97c9f7f1a7.setContent(html_72f8abf60aac6be7c00afb3efc04db76);
+            
+        
+
+        marker_4088a35a4b022ab6a1a6e202cc35ddf8.bindPopup(popup_6271c692e784a40936e50d97c9f7f1a7)
+        ;
+
+        
+    
+    
+            var marker_40656ee98bb1a7d6a9265dd6ea7c3846 = L.marker(
+                [36.3676, 127.3374],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_f023864d1023fe83559a63c9c18cde24 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_cfb8de2d13df3a1a66c0fe846dc2bc37 = $(`<div id="html_cfb8de2d13df3a1a66c0fe846dc2bc37" style="width: 100.0%; height: 100.0%;">유성선병원</div>`)[0];
+                popup_f023864d1023fe83559a63c9c18cde24.setContent(html_cfb8de2d13df3a1a66c0fe846dc2bc37);
+            
+        
+
+        marker_40656ee98bb1a7d6a9265dd6ea7c3846.bindPopup(popup_f023864d1023fe83559a63c9c18cde24)
+        ;
+
+        
+    
+    
+            var marker_e6684f173d3d5d1af4726914276c924e = L.marker(
+                [36.3226, 127.4188],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_4e95d0688bd27182b049c0f58d2b2e78 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_382c9a8c90dd2e18572e86bbc621af9d = $(`<div id="html_382c9a8c90dd2e18572e86bbc621af9d" style="width: 100.0%; height: 100.0%;">대전성모병원</div>`)[0];
+                popup_4e95d0688bd27182b049c0f58d2b2e78.setContent(html_382c9a8c90dd2e18572e86bbc621af9d);
+            
+        
+
+        marker_e6684f173d3d5d1af4726914276c924e.bindPopup(popup_4e95d0688bd27182b049c0f58d2b2e78)
+        ;
+
+        
+    
+    
+            var marker_cc4ff5ff49921e20755699f5781ffba6 = L.marker(
+                [36.3245, 127.4216],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_614a97b3fef5c0e37eeed220a60079ac = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_cb317cdd25b825944536967a4ae6db24 = $(`<div id="html_cb317cdd25b825944536967a4ae6db24" style="width: 100.0%; height: 100.0%;">대전선병원</div>`)[0];
+                popup_614a97b3fef5c0e37eeed220a60079ac.setContent(html_cb317cdd25b825944536967a4ae6db24);
+            
+        
+
+        marker_cc4ff5ff49921e20755699f5781ffba6.bindPopup(popup_614a97b3fef5c0e37eeed220a60079ac)
+        ;
+
+        
+    
+    
+            var marker_381f30124c84c09620d4171be3610fa1 = L.marker(
+                [36.3128, 127.4075],
+                {}
+            ).addTo(map_34da9cb6441f7fcecbf932a58a81f82c);
+        
+    
+        var popup_497a71be4ed549bd82afe16d6c180aa0 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_606e4499244710c8d52f3542a11b6556 = $(`<div id="html_606e4499244710c8d52f3542a11b6556" style="width: 100.0%; height: 100.0%;">충남대학교병원</div>`)[0];
+                popup_497a71be4ed549bd82afe16d6c180aa0.setContent(html_606e4499244710c8d52f3542a11b6556);
+            
+        
+
+        marker_381f30124c84c09620d4171be3610fa1.bindPopup(popup_497a71be4ed549bd82afe16d6c180aa0)
+        ;
+
+        
+    
+</script>
+</html>
