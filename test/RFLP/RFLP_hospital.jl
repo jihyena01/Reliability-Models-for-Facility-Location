@@ -5,7 +5,7 @@ using CSV, DataFrames
 
 include("../../src/formulation.jl")
 include("../../src/heuristic.jl")
-include("../../data/customed_customers.jl")
+include("../../data/hospital_customers.jl")
 include("../../src/Lagrangian_relaxation.jl")
 
 seed = 123
@@ -14,8 +14,7 @@ Random.seed!(seed)
 # ------------------------------------------------------------------
 # 데이터 로드
 # P 개수 100개로 설정
-I, J, h, d, f, NF, F, u, q, P, alpha, lambda, _, _ = data_setting()
-
+I, J, h, d, f, NF, F, u, q, P, alpha, lambda = hospital_data_setting()
 
 # ------------------------------------------------------------------
 # RPMP와 Lagrangian relaxation 알고리즘을 이용한 RPMP의 결과 비교
@@ -35,11 +34,12 @@ else
     println("The optimal solution is not found!")
 end
 
+println("--------------------------------------------")
 println("The upeer bound is: ", UB)
 println("The lower bound is: ", LB)
 println("The iteration number is: ", n)
-println("Relaxed RPMP objective value : ", obj_val)
-println("Original RPMP objective value at first: ", origin_val)
+println("Relaxed RFLP objective value : ", obj_val)
+println("Original RFLP objective value at first: ", origin_val)
 
 
 # ------------------------------------------------------------------

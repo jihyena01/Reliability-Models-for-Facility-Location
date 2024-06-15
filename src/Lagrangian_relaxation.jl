@@ -15,7 +15,7 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
     halving_num = 30
     min_beta = 10^(-8)
     n = 0 # iteration number
-    n_max = 50 # 1200
+    n_max = 100 # 1200
 
     # Initial Multipliers
     lambda = Array{Float64, 2}(undef, length(I), P)
@@ -82,12 +82,10 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
             ## heuristic algorithm => find feasible solution, and update lower bound!
             heuristic_X, heuristic_Y, heuristic_val = heuristic_RPMP(LR_X, LR_Y, I, J, P, d, q, NF, alpha)
             println("heuristic_val: ", heuristic_val)
-            if heuristic_val > LB
-                LB = heuristic_val
-            end
 
             if heuristic_val < UB
                 UB = heuristic_val
+                LB = heuristic_val
             end
 
             if heuristic_val == origin_val
@@ -145,7 +143,7 @@ function Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)
     halving_num = 30
     min_beta = 10^(-8)
     n = 0 # iteration number
-    n_max = 50
+    n_max = 100
 
     # Initial Multipliers
     lambda = Array{Float64, 2}(undef, length(I), P)
@@ -212,12 +210,10 @@ function Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)
             ## heuristic algorithm => find feasible solution, and update lower bound!
             heuristic_X, heuristic_Y, heuristic_val = heuristic_RFLP(LR_X, LR_Y, I, J, P, f, d, q, NF, alpha)
             println("heuristic_val: ", heuristic_val)
-            if heuristic_val > LB
-                LB = heuristic_val
-            end
 
-            if heuristic_val < UB
+            if heuristic_val < UB && heuristic_val >= origin_val
                 UB = heuristic_val
+                LB = heuristic_val
             end
 
             if heuristic_val == origin_val

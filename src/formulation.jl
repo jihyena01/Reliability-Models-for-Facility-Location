@@ -147,9 +147,13 @@ function relaxed_RFLP(I, J, h, d, NF, F, u, q, alpha, lambda)
         end
     end
 
-    obj_term = sum(psi_tilde[i,j,(r+1)] * Y[i,j,r] for i in I, j in J, r in 0:(M-1)) + sum(lambda[i,(r+1)] for i in I, r in 0:(M-1))
+    # obj_term = sum(psi_tilde[i,j,(r+1)] * Y[i,j,r] for i in I, j in J, r in 0:(M-1)) + sum(lambda[i,(r+1)] for i in I, r in 0:(M-1))
+    
+    w1 = sum(f[j] * X[j] for j in J) + sum(h[i] * d[i,j] * Y[i,j,0] for i in I, j in J)
+    w2 = sum(h[i] * (sum(d[i,j]* q^r * Y[i,j,(r)] for j in NF, r in 0:(M-1)) + sum(d[i,j] * q^r * (1-q) * Y[i,j,(r)] for j in F, r in 0:(M-1)) ) for i in I)
 
-     @objective(m, Min, alpha * sum(f[j]*X[j] for j in J) + obj_term)
+    @objective(m, Min, alpha * w1 + (1-alpha) * w2)
+    # @objective(m, Min, alpha * sum(f[j]*X[j] for j in J) + obj_term)
 
     @constraint(m, c2[i in I, j in J, r in 0:(M-1)],Y[i,j,r] <= X[j])
     @constraint(m, c3[i in I, j in J], sum(Y[i,j,r] for r in 0:(M-1)) <=1)

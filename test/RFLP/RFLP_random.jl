@@ -39,8 +39,8 @@ println("--------------------------------------------")
 println("The upeer bound is: ", UB)
 println("The lower bound is: ", LB)
 println("The iteration number is: ", n)
-println("Relaxed RPMP objective value : ", obj_val)
-println("Original RPMP objective value at first: ", origin_val)
+println("Relaxed RFLP objective value : ", obj_val)
+println("Original RFLP objective value at first: ", origin_val)
 
 
 # ------------------------------------------------------------------
