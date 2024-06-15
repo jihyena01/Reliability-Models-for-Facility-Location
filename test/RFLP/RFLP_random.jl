@@ -6,38 +6,52 @@ using CSV, DataFrames
 include("../../src/formulation.jl")
 include("../../src/heuristic.jl")
 include("../../data/customed_customers.jl")
+include("../../src/Lagrangian_relaxation.jl")
 
+seed = 123
+Random.seed!(seed)
+
+# ------------------------------------------------------------------
+# 데이터 로드
+# P 개수 100개로 설정
 I, J, h, d, f, NF, F, u, q, P, alpha, lambda = data_setting() 
 
 
+# ------------------------------------------------------------------
+# RPMP와 Lagrangian relaxation 알고리즘을 이용한 RPMP의 결과 비교
 
-function RFLP(I, J, h, d, f, NF, F, u, q, alpha)
-    # P is not defined! 
+origin_X, origin_Y, origin_val = RFLP(I, J, h, d, f, NF, F, u, q, alpha)
+X, Y, obj_val = relaxed_RFLP(I, J, h, d, NF, F, u, q, alpha, lambda)
+UB, LB, heuristic_val, heuristic_X, heuristic_Y, n = Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)  # heuristic_Y(r index) 1부터 시작
 
-    # the Reliabiltiy Fixed-Charge Location Problem
-    m = Model(CPLEX.Optimizer)
 
-    @variable(m, X[j in J], Bin)
-    @variable(m, Y[i in I, j in J, r in (0:P-1)], Bin)
-    w1 = sum(f[j]*X[j] for j in J) + sum(h[i] * d[i,j] * Y[i,j,0] for i in I, j in J)
-    w2 = sum(h[i] * (sum(d[i,j]* q^r * Y[i,j,r] for j in NF, r in 0:(P-1)) + sum(d[i,j] * q^r * (1-q) * Y[i,j,r] for j in F, r in 0:(P-1)) ) for i in I)
-    @objective(m, Min, sum(alpha * w1 + (1-alpha) * w2))
+# ------------------------------------------------------------------
+# 실험 결과 출력
 
-    @constraint(m, c1[i in I, r in 0:(P-1)], sum(Y[i,j,r] for j in J) + sum(Y[i,j,s] for j in NF, 
-    s in 0:(r-1)) == 1)
-    @constraint(m, c2[i in I, j in J, r in 0:(P-1)],Y[i,j,r] <= X[j])
-    @constraint(m, c3, sum(X[j] for j in J) == P)
-    @constraint(m, c4[i in I, j in J], sum(Y[i,j,r] for r in 0:(P-1)) <=1)
-    @constraint(m, c5, X[u] .==1)
-
-    optimize!(m)
-
-    if termination_status(m) == MOI.OPTIMAL
-        println("The optimal value is: ", objective_value(m))
-        println("The optimal solution is: ", value.(X))
-    else
-        println("No solution")
-    end
-
-    return value.(X), value.(Y), objective_value(m)
+epsilon = 10^-6
+if abs(UB - origin_val) < epsilon
+    println("The optimal solution is found by heuristic!")
+else
+    println("The optimal solution is not found!")
 end
+
+println("--------------------------------------------")
+println("The upeer bound is: ", UB)
+println("The lower bound is: ", LB)
+println("The iteration number is: ", n)
+println("Relaxed RPMP objective value : ", obj_val)
+println("Original RPMP objective value at first: ", origin_val)
+
+
+# ------------------------------------------------------------------
+# 실험 설계
+## a modification 부분 check! level-r 을 0~4까지로 수정. but, in my case, 시설의 개수가 많지 않고 nonfailure 시설에 배치될 확률이 높음
+# 왜냐면 failure 확률 q를 높게 설정했기 때문. (이건 해당 reliability의 성능을 확인해보기 위하여 이렇게 설정함)
+# 따라서 기존 방식을 그대로 사용!
+
+# P, 즉 open facilities 시설 개수가 많을수록 convergence problem에 직면했다고 언급되어 있음.(두 개의 case 모두)
+
+# 실험 결과
+## heuristic method에서 찾는 값이 계속해서 변함! (RPMP와는 다름. 따라서 iteration 이 효과적으로 작용하고 있다고 볼 수 있음)
+# stop condition을 좀 더 완화해야 할 것으로 보임. (후반에는 heuristic_val 이 거의 같은 값으로 수렴해서, n_max값을 조절 )
+# => 논문에서는 100회 iteration만에 수렴하는 것으로 나타남. 나의 경우에도 3-40 회 iteration 만에 수렴하는 것을 확인하였으므로, n_max =100으로 조절)

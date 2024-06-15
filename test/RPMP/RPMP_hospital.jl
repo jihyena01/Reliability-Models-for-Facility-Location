@@ -23,7 +23,7 @@ I, J, h, d, f, NF, F, u, q, P, alpha, lambda, _, _ = data_setting()
 
 X, Y, obj_val = relaxed_RPMP(I, J, h, d, NF, F, u, q, P, alpha, lambda)
 origin_X, origin_Y, origin_val = RPMP(I, J, h, d, NF, F, u, q, P, alpha)
-UB, LB, heuristic_val, heuristic_X, heuristic_Y, n = Lagrangian_relaxation(I, J, h, d, NF, F, u, q, P, alpha)  # heuristic_Y(r index) 1부터 시작
+UB, LB, heuristic_val, heuristic_X, heuristic_Y, n = Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)  # heuristic_Y(r index) 1부터 시작
 
 
 
@@ -32,7 +32,7 @@ UB, LB, heuristic_val, heuristic_X, heuristic_Y, n = Lagrangian_relaxation(I, J,
 # 실험 결과 출력
 
 epsilon = 10^-6
-if heuristic_val - origin_val < epsilon
+if abs(UB - origin_val) < epsilon
     println("The optimal solution is found by heuristic!")
 else
     println("The optimal solution is not found!")

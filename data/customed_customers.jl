@@ -8,8 +8,8 @@ function data_setting()
     ## Data setting 
     # number of customers & facilities
     customers = 30
-    facilities = 10
-    nonfailable_faciltiy = 3
+    facilities = 40
+    nonfailable_faciltiy = 10
 
     # demand & cost
     demand_low = 10
