@@ -15,7 +15,7 @@ Random.seed!(seed)
 # 데이터 로드
 # P 개수 100개로 설정
 I, J, h, d, f, NF, F, u, q, P, alpha, lambda = data_setting() 
-
+alpha = 1
 
 # ------------------------------------------------------------------
 # RPMP와 Lagrangian relaxation 알고리즘을 이용한 RPMP의 결과 비교

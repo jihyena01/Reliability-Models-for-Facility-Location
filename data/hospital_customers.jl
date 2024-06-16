@@ -43,8 +43,8 @@ function hospital_data_setting()
 
     q = 0.5 # failure probability
     alpha = 0.1
-    P = facilities # P+1 = 5, 전체 facility의 수
-    lambda = Random.rand(0:1, length(I), P)
+    P = 5 # P+1 = 5, 전체 facility의 수
+    lambda = Random.rand(0:1, length(I), facilities)
 
     return I, J, h, d, f, NF, F, u, q, P, alpha, lambda
 end

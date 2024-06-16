@@ -15,13 +15,13 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
     halving_num = 30
     min_beta = 10^(-8)
     n = 0 # iteration number
-    n_max = 100 # 1200
+    n_max = 50 # 1200
 
     # Initial Multipliers
     lambda = Array{Float64, 2}(undef, length(I), P)
     for i in I
-        for r in 0:(P-1)
-            lambda[i,(r+1)] = h[i]*d_var / 10^(r+2)
+        for r in 1:(P)
+            lambda[i,(r)] = h[i]*d_var / 10^(r+2)
         end
     end
 
@@ -36,11 +36,11 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
     exit_loop = false
 
     # Initial step size(t)
-    t = beta *(UB - LR_val) / (sum(1- sum(Y[i,j,r] for j in J) - (r > 0 ? sum(Y[i,j,s] for j in NF, s in 0:(r-1)) : 0) for i in I, r in 0:(P-1)))^2
+    t = beta *(UB - LR_val) / (sum(1- sum(Y[i,j,r] for j in J) - (r > 1 ? sum(Y[i,j,s] for j in NF, s in 1:(r-1)) : 0) for i in I, r in 1:(P)))^2
 
 
 
-    check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0 ) == 1 for i in I, r in 0:(P-1))
+    check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0 ) == 1 for i in I, r in 1:(P))
 
     if check_feasibility == true
         println("The initial solution is feasible. stop! ") # 종료
@@ -50,9 +50,9 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
         println("The initial solution is infeasible. go to step 2") # Step 2로 이동료
         # multipliers update
         for i in I
-            for r in 0:(P-1)
+            for r in 1:(P)
             
-                lambda[i, (r+1)] = lambda[i,(r+1)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0))
+                lambda[i, (r)] = lambda[i,(r)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0))
             end
         end
     end
@@ -65,7 +65,7 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
             LB = LR_val
         end
 
-        check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0 ) == 1 for i in I, r in 0:(P-1))
+        check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0 ) == 1 for i in I, r in 1:(P))
         n = n+1 
 
         if check_feasibility == true
@@ -75,8 +75,8 @@ function Lagrangian_relaxation_RPMP(I, J, h, d, NF, F, u, q, P, alpha)
             # println("The initial solution is infeasible. go to step 2") # Step 2로 이동
             # multipliers update
             for i in I
-                for r in 0:(P-1)
-                    lambda[i, (r+1)] = lambda[i,(r+1)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0))
+                for r in 1:(P)
+                    lambda[i, (r)] = lambda[i,(r)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0))
                 end
             end
             ## heuristic algorithm => find feasible solution, and update lower bound!
@@ -136,39 +136,39 @@ function Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)
     #### Lagrangian Relaxation Algorithm ---------------------------------------------------
 
     ## Step 0, Initial parameter setting ==================================================
-
+    M = length(J)
     d_var = sum(d[i,j] for i in I, j in J) / (length(I)*length(J))
     tolerance = 0.001
     beta = 2
     halving_num = 30
     min_beta = 10^(-8)
     n = 0 # iteration number
-    n_max = 100
+    n_max = 50
 
     # Initial Multipliers
-    lambda = Array{Float64, 2}(undef, length(I), P)
+    lambda = Array{Float64, 2}(undef, length(I), M)
     for i in I
-        for r in 0:(P-1)
-            lambda[i,(r+1)] = h[i]*d_var / 10^(r+2)
+        for r in 1:(M)
+            lambda[i,(r)] = h[i]*d_var / 10^(r+2)
         end
     end
 
     # initial upper bound & lower bound 
     UB = 10^8
     heuristic_val = -10^8
-    heuristic_X, heuristic_Y = zeros(length(I), length(J), P), zeros(length(I), length(J), P)
-    LR_X, LR_Y, LR_val = relaxed_RPMP(I, J, h, d, NF, F, u, q, P, alpha, lambda)
+    heuristic_X, heuristic_Y = zeros(length(I), length(J), P), zeros(length(I), length(J), M)
+    LR_X, LR_Y, LR_val = relaxed_RFLP(I, J, h, d, NF, F, u, q, alpha, lambda)
     println("initianl LR_val: ", LR_val)
     LB = LR_val
     n = n +1
     exit_loop = false
 
     # Initial step size(t)
-    t = beta *(UB - LR_val) / (sum(1- sum(Y[i,j,r] for j in J) - (r > 0 ? sum(Y[i,j,s] for j in NF, s in 0:(r-1)) : 0) for i in I, r in 0:(P-1)))^2
+    t = beta *(UB - LR_val) / (sum(1- sum(Y[i,j,r] for j in J) - (r > 1 ? sum(Y[i,j,s] for j in NF, s in 1:(r-1)) : 0) for i in I, r in 1:(M)))^2
 
 
 
-    check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0 ) == 1 for i in I, r in 0:(P-1))
+    check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0 ) == 1 for i in I, r in 1:(M))
 
     if check_feasibility == true
         println("The initial solution is feasible. stop! ") # 종료
@@ -178,9 +178,9 @@ function Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)
         println("The initial solution is infeasible. go to step 2") # Step 2로 이동료
         # multipliers update
         for i in I
-            for r in 0:(P-1)
+            for r in 1:(M)
             
-                lambda[i, (r+1)] = lambda[i,(r+1)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0))
+                lambda[i, (r)] = lambda[i,(r)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0))
             end
         end
     end
@@ -188,12 +188,12 @@ function Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)
     while exit_loop != true
         ## Step 1,===============================================================
         # Initial LR_val feasibility check
-        LR_X, LR_Y, LR_val = relaxed_RPMP(I, J, h, d, NF, F, u, q, P, alpha, lambda)
+        LR_X, LR_Y, LR_val = relaxed_RFLP(I, J, h, d, NF, F, u, q, alpha, lambda)
         if LR_val > LB
             LB = LR_val
         end
 
-        check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0 ) == 1 for i in I, r in 0:(P-1))
+        check_feasibility = all(sum(LR_Y[i,j,r] for j in J) + (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0 ) == 1 for i in I, r in 1:(M))
         n = n+1 
 
         if check_feasibility == true
@@ -203,8 +203,8 @@ function Lagrangian_relaxation_RFLP(I, J, h, d, f, NF, F, u, q, P, alpha)
             # println("The initial solution is infeasible. go to step 2") # Step 2로 이동
             # multipliers update
             for i in I
-                for r in 0:(P-1)
-                    lambda[i, (r+1)] = lambda[i,(r+1)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 0 ? sum(LR_Y[i,j,s] for j in NF, s in 0:(r-1)) : 0))
+                for r in 1:(M)
+                    lambda[i, (r)] = lambda[i,(r)] + t*(1- sum(LR_Y[i,j,r] for j in J) - (r > 1 ? sum(LR_Y[i,j,s] for j in NF, s in 1:(r-1)) : 0))
                 end
             end
             ## heuristic algorithm => find feasible solution, and update lower bound!

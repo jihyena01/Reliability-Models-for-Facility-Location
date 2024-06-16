@@ -17,7 +17,7 @@ function data_setting()
 
     cost_low = 20
     cost_high = 100
-    penalty_cost = 150 # 임의로 지정함.
+    penalty_cost = 600 # 임의로 지정함.
 
     fixed_cost_low = 100
     fixed_cost_high = 500
@@ -56,9 +56,9 @@ function data_setting()
 
 
     q = 0.5 # failure probability
-    alpha = 0.1
-    P = facilities # P+1 = 5, 전체 facility의 수
-    lambda = Random.rand(0:1, length(I), P)
+    alpha = 0.5
+    P = 30 # P+1 = 5, 전체 facility의 수
+    lambda = Random.rand(0:1, length(I), facilities)
 
     return I, J, h, d, f, NF, F, u, q, P, alpha, lambda, customer_positions, facility_positions
 end

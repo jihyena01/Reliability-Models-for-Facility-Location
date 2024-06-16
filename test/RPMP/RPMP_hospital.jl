@@ -15,7 +15,7 @@ Random.seed!(seed)
 # 데이터 로드
 I, J, h, d, f, NF, F, u, q, P, alpha, lambda = hospital_data_setting()
 
-
+alpha = 1
 
 
 # ------------------------------------------------------------------

@@ -6,6 +6,7 @@ using CSV, DataFrames
 include("../../src/formulation.jl")
 include("../../src/heuristic.jl")
 include("../../data/customed_customers.jl")
+in
 
 seed = 123
 Random.seed!(seed)
